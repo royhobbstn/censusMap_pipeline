@@ -31,7 +31,7 @@ while IFS=',' read f1 f2 f3 f4 f5; do echo -n ","`printf $f2`"_"`printf %03d $f4
 wget https://storage.googleapis.com/acs1115_stage/eseq001.csv
 
 mkdir readyfiles
-echo >> schema0001.txt
+echo -n "," >> schema0001.txt
 cat ./schemas/schema0001.txt eseq001.csv > ./readyfiles/eseq001.csv 
 
 mkdir complete
@@ -43,5 +43,5 @@ tile-join -pk -f -o ./outputmbtiles/acs1115_county_eseq001.mbtiles -c ./complete
 gsutil rm -r gs://mbtiles_staging
 gsutil mb gs://mbtiles_staging
 
-gsutil cp ./outputmbtiles/acs1115_county_eseq01.mbtiles gs://mbtiles_staging
+gsutil cp ./outputmbtiles/acs1115_county_eseq001.mbtiles gs://mbtiles_staging
 gsutil cp ./complete/eseq001.csv gs://mbtiles_staging

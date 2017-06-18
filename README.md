@@ -3,7 +3,7 @@ Use tippecanoe and tile-join to automate the creation of american community surv
 
 # Setup
 
-When creating a Google Compute Instance, enable all APIs and choose to allow all traffic from HTTP, HTTPS
+When creating a Google Compute Instance, enable all APIs.
 
 
 Install linux brew and dependencies

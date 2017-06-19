@@ -17,10 +17,10 @@ npm install -g mapshaper
 wget http://www2.census.gov/geo/tiger/GENZ2015/shp/cb_2015_us_county_20m.zip
 unzip cb_2015_us_county_20m.zip
 
-mapshaper cb_2015_us_county_20m.shp -each "AFFGEOID='05000US' + GEOID"
+mapshaper cb_2015_us_county_20m.shp -each "AFFGEOIDNEW='05000US' + GEOID"
 mapshaper cb_2015_us_county_20m.shp -o format=geojson
 
-tippecanoe -f -o acs1115_county.mbtiles -l county -z 12 -y AFFGEOID -pk cb_2015_us_county_20m.json
+tippecanoe -f -o acs1115_county.mbtiles -l county -z 12 -y AFFGEOIDNEW -pk cb_2015_us_county_20m.json
 
 mkdir schemas
 curl --progress-bar https://www2.census.gov/programs-surveys/acs/summary_file/2015/documentation/user_tools/ACS_5yr_Seq_Table_Number_Lookup.txt -O

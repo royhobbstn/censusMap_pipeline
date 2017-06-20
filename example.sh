@@ -38,11 +38,14 @@ cat ./schemas/schema0001.txt eseq001.csv > ./readyfiles/eseq001.csv
 mkdir complete
 awk -F $',' ' { t = $1; $1 = $50; $50 = t; print; } ' OFS=$',' ./readyfiles/eseq001.csv > ./complete/eseq001.csv
 
+mkdir encoded
+iconv -f iso-8859-1 -t utf-8 ./complete/eseq001.csv > ./encoded/eseq001.csv
+
 mkdir outputmbtiles
-tile-join -pk -f -o ./outputmbtiles/acs1115_county_eseq001.mbtiles -c ./complete/eseq001.csv acs1115_county.mbtiles
+tile-join -pk -f -o ./outputmbtiles/acs1115_county_eseq001.mbtiles -c ./encoded/eseq001.csv acs1115_county.mbtiles
 
 gsutil rm -r gs://mbtiles_staging
 gsutil mb gs://mbtiles_staging
 
 gsutil cp ./outputmbtiles/acs1115_county_eseq001.mbtiles gs://mbtiles_staging
-gsutil cp ./complete/eseq001.csv gs://mbtiles_staging
+gsutil cp ./encoded/eseq001.csv gs://mbtiles_staging

@@ -22,21 +22,11 @@ sed -i -e 's/"GEOID":"/"GEOID":"05000US/g' tl_2015_us_county.json
 
 tippecanoe -f -o acs1115_county.mbtiles -l county -z 12 -y GEOID -pk tl_2015_us_county.json
 
-mkdir schemas
-curl --progress-bar https://www2.census.gov/programs-surveys/acs/summary_file/2015/documentation/user_tools/ACS_5yr_Seq_Table_Number_Lookup.txt -O
-sed 1d ACS_5yr_Seq_Table_Number_Lookup.txt > no_header.csv
-awk -F, '$4 ~ /^[0-9]+$/' no_header.csv > columns_list.csv
-n=122;for i in $(seq -f "%04g" ${n});do echo -n "KEY,FILEID,STUSAB,SUMLEVEL,COMPONENT,LOGRECNO,US,REGION,DIVISION,STATECE,STATE,COUNTY,COUSUB,PLACE,TRACT,BLKGRP,CONCIT,AIANHH,AIANHHFP,AIHHTLI,AITSCE,AITS,ANRC,CBSA,CSA,METDIV,MACC,MEMI,NECTA,CNECTA,NECTADIV,UA,BLANK1,CDCURR,SLDU,SLDL,BLANK2,BLANK3,ZCTA5,SUBMCD,SDELM,SDSEC,SDUNI,UR,PCI,BLANK4,BLANK5,PUMA5,BLANK6,GEOID,NAME,BTTR,BTBG,BLANK7" > "./schemas/schema$i.txt"; done;
-while IFS=',' read f1 f2 f3 f4 f5; do echo -n ","`printf $f2`"_"`printf %03d $f4`"" >> "./schemas/schema$f3.txt"; done < columns_list.csv;
-
-wget https://storage.googleapis.com/acs1115_stage/eseq001.csv
-
-mkdir readyfiles
-echo -n -e ",\n" >> ./schemas/schema0001.txt
-cat ./schemas/schema0001.txt eseq001.csv > ./readyfiles/eseq001.csv 
+# run create_concat_seq first to make data available here
+# I cut that code out of this place
 
 mkdir complete
-awk -F $',' ' { t = $1; $1 = $50; $50 = t; print; } ' OFS=$',' ./readyfiles/eseq001.csv > ./complete/eseq001.csv
+awk -F $',' ' { t = $1; $1 = $50; $50 = t; print; } ' OFS=$',' ./readyfiles/eseqCAT001002003.csv > ./complete/eseq001.csv
 
 mkdir encoded
 iconv -f iso-8859-1 -t utf-8 ./complete/eseq001.csv > ./encoded/eseq001.csv
@@ -58,3 +48,6 @@ gsutil cp ./outputmbtiles/acs1115_county_eseq001.mbtiles gs://mbtiles_staging
 # try with BG will give better sense on how much information can be fit in tiles
 
 # separate script to combine multiple shapefiles together
+
+
+# separate script concatenate into groups of 3 into own bucket

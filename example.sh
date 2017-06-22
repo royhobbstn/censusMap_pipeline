@@ -23,7 +23,7 @@ sed -i -e 's/"GEOID":"/"GEOID":"05000US/g' tl_2015_us_county.json
 tippecanoe -f -o acs1115_county.mbtiles -l county -z 12 -y GEOID -pk tl_2015_us_county.json
 
 # run create_concat_seq first to make data available here
-# I cut that code out of this place
+# I cut that code out of this place 
 
 mkdir complete
 awk -F $',' ' { t = $1; $1 = $50; $50 = t; print; } ' OFS=$',' ./readyfiles/eseqCAT001002003.csv > ./complete/eseq001.csv

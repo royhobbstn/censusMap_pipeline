@@ -1,1 +1,7 @@
-install linux brew
+integrate example.sh into main
+integrate tileCSVmerge into main
+
+
+make this work:
+
+# n=122;for i in $(seq -f "%03g" ${n}); do echo -n -e ",\n" >> ./schemas/schema0$i.txt; cat ./schemas/schema0$i.txt eseq$i.csv > ./readyfiles/eseq$i.csv; done;

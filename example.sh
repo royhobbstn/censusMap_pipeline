@@ -15,18 +15,24 @@ nvm install node
 npm install -g mapshaper
 
 # cartographic shapefiles
+# programmatically combine?  Separate routine?
 # https://www2.census.gov/geo/tiger/GENZ2015/shp/
 
 # repeat for all geo files
 wget https://www2.census.gov/geo/tiger/TIGER2015/COUNTY/tl_2015_us_county.zip
 unzip tl_2015_us_county.zip
+# end repeat for all geo files
 
-# alter geoid to match between data and geo file 
+# repeat for all shp files
 mapshaper tl_2015_us_county.shp -o format=geojson
-sed -i -e 's/"GEOID":"/"GEOID":"05000US/g' tl_2015_us_county.json
+# end repeat for all shp files 
 
+# repeat for all json files 
+# alter geoid to match between data and geo file
+sed -i -e 's/"GEOID":"/"GEOID":"05000US/g' tl_2015_us_county.json
+# only retain geoid column
 tippecanoe -f -o acs1115_county.mbtiles -l county -z 12 -y GEOID -pk tl_2015_us_county.json
-# end repeat for all geo files 
+# end repeat for all json files
 
 # download all CSV files from multi file bucket
 
@@ -35,16 +41,15 @@ mkdir encoded
 mkdir outputmbtiles
 
 # for each CSV file
-
 # swap columns so geo key is first
 awk -F $',' ' { t = $1; $1 = $50; $50 = t; print; } ' OFS=$',' ./readyfiles/eseqCAT001002003.csv > ./complete/eseq001.csv
 
 iconv -f iso-8859-1 -t utf-8 ./complete/eseq001.csv > ./encoded/eseq001.csv
 
-# for each geo file 
+# for each mbtiles file 
 tile-join -pk -f -o ./outputmbtiles/acs1115_county_eseq001.mbtiles -c ./encoded/eseq001.csv acs1115_county.mbtiles
-# done
-# done
+# end for each mbtiles
+# end for each csv 
 
 gsutil rm -r gs://mbtiles_staging
 gsutil mb gs://mbtiles_staging

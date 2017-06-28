@@ -26,14 +26,14 @@ mkdir outputmbtiles
 # TODO should be part of tileCSVmerge
 # for each CSV file
 # swap columns so geo key is first
-for $file in *.csv
+for file in *.csv
 do awk -F $',' ' { t = $1; $1 = $50; $50 = t; print; } ' OFS=$',' $file > ./completed/$file;
 iconv -f iso-8859-1 -t utf-8 ./completed/$file > ./encoded/$file
 done;
 
-for $file in ./encoded/*.csv
+for file in ./encoded/*.csv
 
-do for $tile in *.mbtiles
+do for tile in *.mbtiles
 do tile-join -pk -f -o ./outputmbtiles/${file%????}${tile%????}.mbtiles -c ./encoded/$file $tile
 done;
 

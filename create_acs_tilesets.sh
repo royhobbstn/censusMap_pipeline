@@ -14,9 +14,12 @@ brew install tippecanoe
 
 
 # download all CSV files from multi file bucket
-gsutil cp gs://acs1115_multisequence/*.csv .
+# gsutil cp gs://acs1115_multisequence/*.csv .
+# gsutil cp gs://acs1115_tiles_staging/*.mbtiles
+wget https://storage.cloud.google.com/acs1115_multisequence/eseq_001_002_003.csv
+wget https://storage.cloud.google.com/acs1115_tiles_staging/acs1115_bg.mbtiles
 
-mkdir complete
+mkdir completed
 mkdir encoded
 mkdir outputmbtiles
 
@@ -24,22 +27,30 @@ mkdir outputmbtiles
 # for each CSV file
 # swap columns so geo key is first
 for $file in *.csv
-do awk -F $',' ' { t = $1; $1 = $50; $50 = t; print; } ' OFS=$',' $file > ./complete/$file;
-iconv -f iso-8859-1 -t utf-8 ./complete/$file > ./encoded/$file
+do awk -F $',' ' { t = $1; $1 = $50; $50 = t; print; } ' OFS=$',' $file > ./completed/$file;
+iconv -f iso-8859-1 -t utf-8 ./completed/$file > ./encoded/$file
+done;
+
+for $file in ./encoded/*.csv
+
+do for $tile in *.mbtiles
+do tile-join -pk -f -o ./outputmbtiles/${file%????}${tile%????}.mbtiles -c ./encoded/$file $tile
+done;
+
 done;
 
 
 
 # for each mbtiles file 
-tile-join -pk -f -o ./outputmbtiles/acs1115_county_eseq001.mbtiles -c ./encoded/eseq001.csv acs1115_county.mbtiles
+
 # end for each mbtiles
 # end for each csv 
 
-gsutil rm -r gs://mbtiles_staging
-gsutil mb gs://mbtiles_staging
+gsutil rm -r gs://acs1115_tiles
+gsutil mb gs://acs1115_tiles
 
 # copy all mbtiles files at once
-gsutil cp ./outputmbtiles/acs1115_county_eseq001.mbtiles gs://mbtiles_staging
+gsutil cp ./outputmbtiles/*.mbtiles gs://acs1115_tiles
 
 
 

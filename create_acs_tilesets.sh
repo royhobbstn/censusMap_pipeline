@@ -31,14 +31,13 @@ do awk -F $',' ' { t = $1; $1 = $50; $50 = t; print; } ' OFS=$',' $file > ./comp
 iconv -f iso-8859-1 -t utf-8 ./completed/$file > ./encoded/$file
 done;
 
+# nested loops to join every csv with every tileset
 for file in ./encoded/*.csv
-do echo $file
-for tile in *.mbtiles
-do echo $tile
-newfile=${file%????}
-tile-join -pk -f -o ./outputmbtiles/${newfile#??????????}${tile%????????}.mbtiles -c $file $tile
+do for tile in *.mbtiles
+do newfile=${file%????}
+echo "joining $newfile with $tile"
+tile-join -pk -f -o ./outputmbtiles/${newfile#??????????}_${tile%????????}.mbtiles -c $file $tile
 done;
-
 done;
 
 

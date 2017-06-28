@@ -35,7 +35,8 @@ for file in ./encoded/*.csv
 do echo $file
 for tile in *.mbtiles
 do echo $tile
-tile-join -pk -f -o ./outputmbtiles/${file%????}${tile%????}.mbtiles -c $file $tile
+newfile=${file%????}
+tile-join -pk -f -o ./outputmbtiles/${newfile#??????????}${tile%????????}.mbtiles -c $file $tile
 done;
 
 done;

@@ -34,7 +34,7 @@ mkdir stateshp
 cd stateshp
 
 ## declare an array variable
-declare -a arr=("01" "02" "04")
+declare -a arr=("01" "02" "04" "05" "06" "08" "09" "10" "11" "12" "13" "15" "16" "17" "18" "19" "20" "21" "22" "23" "24" "25" "26" "27" "28" "29" "30" "31" "32" "33" "34" "35" "36" "37" "38" "39" "40" "41" "42" "44" "45" "46" "47" "48" "49" "50" "51" "53" "54" "55" "56" "60" "66" "69" "72" "78")
 
 ## now loop through the above array
 for i in "${arr[@]}"
@@ -78,11 +78,11 @@ tippecanoe -f -o acs1115_place.mbtiles -l place -z 10 -y GEOID -pk cb_2015_us_pl
 tippecanoe -f -o acs1115_tract.mbtiles -l tract -z 10 -y GEOID -pk cb_2015_us_tract_500k.json
 # end custom for each json file
 
-gsutil rm -r gs://mbtiles_staging
-gsutil mb gs://mbtiles_staging
+gsutil rm -r gs://acs1115_tiles_staging
+gsutil mb gs://acs1115_tiles_staging
 
 # copy all mbtiles files at once
-gsutil cp *.mbtiles gs://mbtiles_staging
-gsutil cp *.json gs://mbtiles_staging
+gsutil cp *.mbtiles gs://acs1115_tiles_staging
+gsutil cp *.json gs://acs1115_tiles_staging
 
 

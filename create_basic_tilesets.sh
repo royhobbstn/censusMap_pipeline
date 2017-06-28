@@ -70,8 +70,8 @@ do mapshaper $file -o format=geojson; done;
 
 # custom per each json file
 # alter geoid to match between data and geo file 0400000US31
-sed -i -e 's/0400000US/05000US/g' cb_2015_us_county_500k.json
-sed -i -e 's/0500000US/04000US/g' cb_2015_us_state_500k.json
+sed -i -e 's/0500000US/05000US/g' cb_2015_us_county_500k.json
+sed -i -e 's/0400000US/04000US/g' cb_2015_us_state_500k.json
 sed -i -e 's/1500000US/15000US/g' cb_2015_us_bg_500k.json
 sed -i -e 's/1600000US/16000US/g' cb_2015_us_place_500k.json
 sed -i -e 's/1400000US/14000US/g' cb_2015_us_tract_500k.json

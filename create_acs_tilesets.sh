@@ -16,8 +16,8 @@ brew install tippecanoe
 # download all CSV files from multi file bucket
 # gsutil cp gs://acs1115_multisequence/*.csv .
 # gsutil cp gs://acs1115_tiles_staging/*.mbtiles
-wget https://storage.cloud.google.com/acs1115_multisequence/eseq_001_002_003.csv
-wget https://storage.cloud.google.com/acs1115_tiles_staging/acs1115_bg.mbtiles
+wget https://storage.googleapis.com/acs1115_multisequence/eseq_001_002_003.csv
+wget https://storage.googleapis.com/acs1115_tiles_staging/acs1115_bg.mbtiles
 
 mkdir completed
 mkdir encoded

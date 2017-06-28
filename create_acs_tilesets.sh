@@ -32,9 +32,10 @@ iconv -f iso-8859-1 -t utf-8 ./completed/$file > ./encoded/$file
 done;
 
 for file in ./encoded/*.csv
-
-do for tile in *.mbtiles
-do tile-join -pk -f -o ./outputmbtiles/${file%????}${tile%????}.mbtiles -c ./encoded/$file $tile
+do echo $file
+for tile in *.mbtiles
+do echo $tile
+tile-join -pk -f -o ./outputmbtiles/${file%????}${tile%????}.mbtiles -c $file $tile
 done;
 
 done;

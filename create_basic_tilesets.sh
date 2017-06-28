@@ -7,6 +7,13 @@ cd run
 
 sudo apt-get install -y unzip
 
+sudo apt-get install -y ruby
+ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install)" < /dev/null
+PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
+echo 'export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"' >>~/.bash_profile
+
+brew install tippecanoe
+
 wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | bash
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"

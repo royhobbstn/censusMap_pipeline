@@ -17,7 +17,7 @@ brew install tippecanoe
 # gsutil cp gs://acs1115_multisequence/*.csv .
 # gsutil cp gs://acs1115_tiles_staging/*.mbtiles
 wget https://storage.googleapis.com/acs1115_multisequence/eseq_001_002_003.csv
-wget https://storage.googleapis.com/acs1115_tiles_staging/acs1115_bg.mbtiles
+wget https://storage.googleapis.com/acs1115_tiles_staging/acs1115_state.mbtiles
 
 mkdir completed
 mkdir encoded
@@ -29,6 +29,7 @@ mkdir outputmbtiles
 for file in *.csv
 do awk -F $',' ' { t = $1; $1 = $50; $50 = t; print; } ' OFS=$',' $file > ./completed/$file;
 iconv -f iso-8859-1 -t utf-8 ./completed/$file > ./encoded/$file
+sed -i '1s/^/AFF/' ./encoded/$file
 done;
 
 # nested loops to join every csv with every tileset

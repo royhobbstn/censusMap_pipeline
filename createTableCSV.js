@@ -8,7 +8,7 @@ const request = require('request');
 const json2csv = require('json2csv');
 
 var datatree;
-var write_stack = [];
+
 
 // load data configuration JSON to get list of table names needed
 const getUniqueTableNames = new Promise(function(resolve, reject) {
@@ -51,6 +51,7 @@ Promise.all([getUniqueTableNames, createStorageBucket]).then(function(success) {
 
 
     const unique_tables = success[0];
+    let write_stack = [];
 
     unique_tables.forEach(table => {
 
@@ -89,12 +90,12 @@ Promise.all([getUniqueTableNames, createStorageBucket]).then(function(success) {
 
         write_stack.push(pr);
 
+        Promise.all(write_stack).then((file_to_upload) => {
+            console.log(file_to_upload);
+        });
+
     });
 
 
 
-});
-
-Promise.all(write_stack).then((file_to_upload) => {
-    console.log(file_to_upload);
 });

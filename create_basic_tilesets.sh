@@ -78,12 +78,17 @@ sed -i -e 's/1400000US/14000US/g' cb_2015_us_tract_500k.json
 
 
 # only retain geoid column
-tippecanoe -f -o acs1115_county.mbtiles -l county -z 10 -y AFFGEOID -pk cb_2015_us_county_500k.json
-tippecanoe -f -o acs1115_state.mbtiles -l state -z 10 -y AFFGEOID -pk cb_2015_us_state_500k.json
-tippecanoe -f -o acs1115_bg.mbtiles -l bg -z 10 -y AFFGEOID -pk cb_2015_us_bg_500k.json
-tippecanoe -f -o acs1115_place.mbtiles -l place -z 10 -y AFFGEOID -pk cb_2015_us_place_500k.json
-tippecanoe -f -o acs1115_tract.mbtiles -l tract -z 10 -y AFFGEOID -pk cb_2015_us_tract_500k.json
+tippecanoe -f -o acs1115_county.mbtiles -l county -z 10 -y AFFGEOID --drop-smallest-as-needed cb_2015_us_county_500k.json
+tippecanoe -f -o acs1115_state.mbtiles -l state -z 10 -y AFFGEOID --drop-smallest-as-needed cb_2015_us_state_500k.json
+tippecanoe -f -o acs1115_bg.mbtiles -l bg -z 10 -y AFFGEOID --drop-smallest-as-needed cb_2015_us_bg_500k.json
+tippecanoe -f -o acs1115_place.mbtiles -l place -z 10 -y AFFGEOID --drop-smallest-as-needed cb_2015_us_place_500k.json
+tippecanoe -f -o acs1115_tract.mbtiles -l tract -z 10 -y AFFGEOID --drop-smallest-as-needed cb_2015_us_tract_500k.json
 # end custom for each json file
+
+# try some of these:
+# --drop-smallest-as-needed
+# --drop-densest-as-needed
+# --no-tile-size-limit
 
 gsutil rm -r gs://acs1115_tiles_staging
 gsutil mb gs://acs1115_tiles_staging

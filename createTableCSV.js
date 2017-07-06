@@ -1,10 +1,3 @@
-// create query
-
-// ;
-
-// send query
-
-// save csv in bucket
 'use strict';
 
 var fs = require("fs");
@@ -14,6 +7,7 @@ const BigQuery = require('@google-cloud/bigquery');
 const request = require('request');
 
 var datatree;
+var write_stack = [];
 
 // load data configuration JSON to get list of table names needed
 const getUniqueTableNames = new Promise(function(resolve, reject) {
@@ -59,33 +53,45 @@ Promise.all([getUniqueTableNames, createStorageBucket]).then(function(success) {
 
     unique_tables.forEach(table => {
 
-        const sqlQuery = `SELECT * from acs1115tables.e${table.toUpperCase()} WHERE SUMLEVEL='050' OR SUMLEVEL='040' OR SUMLEVEL='140' OR SUMLEVEL='150' OR SUMLEVEL='160' LIMIT 2;`;
+        const pr = new Promise((resolve, reject) => {
+            const sqlQuery = `SELECT * from acs1115tables.e${table.toUpperCase()} WHERE SUMLEVEL='050' OR SUMLEVEL='040' OR SUMLEVEL='140' OR SUMLEVEL='150' OR SUMLEVEL='160' LIMIT 2;`;
 
-        console.log(sqlQuery);
+            console.log(sqlQuery);
 
-        // Query options list: https://cloud.google.com/bigquery/docs/reference/v2/jobs/query
-        const options = {
-            query: sqlQuery,
-            useLegacySql: false // Use standard SQL syntax for queries.
-        };
+            // Query options list: https://cloud.google.com/bigquery/docs/reference/v2/jobs/query
+            const options = {
+                query: sqlQuery,
+                useLegacySql: false // Use standard SQL syntax for queries.
+            };
 
-        // Runs the query
-        bigquery
-            .query(options)
-            .then((results) => {
-                const rows = results[0].map(d => {
-                    return Object.assign({}, d, {
-                        AFFGEOID: '10'
+            // Runs the query
+            bigquery
+                .query(options)
+                .then((results) => {
+                    const rows = results[0];
+                    console.log(rows);
+
+                    fs.writeFile('./output/' + table, rows, function(err) {
+                        if (err) {
+                            console.log(err);
+                        }
+                        resolve('./output/' + table);
                     });
+
+                })
+                .catch((err) => {
+                    console.log(err);
                 });
-                console.log(rows);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+        });
+
+        write_stack.push(pr);
 
     });
 
 
 
+});
+
+Promise.all(write_stack).then((file_to_upload) => {
+    console.log(file_to_upload);
 });

@@ -5,6 +5,7 @@ var fs = require("fs");
 const gcs = require('@google-cloud/storage')();
 const BigQuery = require('@google-cloud/bigquery');
 const request = require('request');
+const json2csv = require('json2csv');
 
 var datatree;
 var write_stack = [];
@@ -68,14 +69,16 @@ Promise.all([getUniqueTableNames, createStorageBucket]).then(function(success) {
             bigquery
                 .query(options)
                 .then((results) => {
-                    const rows = results[0];
-                    console.log(rows);
 
-                    fs.writeFile('./output/' + table, rows, function(err) {
+                    const csv = json2csv({
+                        data: results[0]
+                    });
+
+                    fs.writeFile('./output/' + table + '.csv', csv, function(err) {
                         if (err) {
                             console.log(err);
                         }
-                        resolve('./output/' + table);
+                        resolve('./output/' + table + '.csv');
                     });
 
                 })

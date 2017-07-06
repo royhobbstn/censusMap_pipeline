@@ -56,7 +56,7 @@ Promise.all([getUniqueTableNames, createStorageBucket]).then(function(success) {
     unique_tables.forEach(table => {
 
         const pr = new Promise((resolve, reject) => {
-            const sqlQuery = `SELECT * from acs1115tables.e${table.toUpperCase()} WHERE SUMLEVEL='050' OR SUMLEVEL='040' OR SUMLEVEL='140' OR SUMLEVEL='150' OR SUMLEVEL='160' LIMIT 2;`;
+            const sqlQuery = `SELECT * from acs1115tables.e${table.toUpperCase()} WHERE SUMLEVEL='050' OR SUMLEVEL='040' OR SUMLEVEL='140' OR SUMLEVEL='150' OR SUMLEVEL='160';`;
 
             console.log(sqlQuery);
 
@@ -90,12 +90,25 @@ Promise.all([getUniqueTableNames, createStorageBucket]).then(function(success) {
 
         write_stack.push(pr);
 
-        Promise.all(write_stack).then((file_to_upload) => {
-            console.log(file_to_upload);
-        });
 
     });
 
 
+    Promise.all(write_stack).then((file_to_upload) => {
+        console.log(file_to_upload);
+
+        var bucket = gcs.bucket('acs1115_tile_tables');
+
+        file_to_upload.forEach(filename => {
+
+            // Upload a local file to a new file to be created in your bucket. 
+            bucket.upload(filename, function(err, file) {
+                if (!err) {
+                    console.log(filename + ' has been uploaded.');
+                }
+            });
+
+        });
+    });
 
 });

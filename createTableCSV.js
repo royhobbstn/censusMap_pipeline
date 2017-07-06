@@ -39,7 +39,7 @@ const getUniqueTableNames = new Promise(function(resolve, reject) {
 const createStorageBucket = new Promise(function(resolve, reject) {
     gcs.createBucket('acs1115_tile_tables', function(err, gcs) {
         if (err) {
-            console.log(err);
+            // console.log(err);
         }
         // naively assume all is well
         resolve();
@@ -73,7 +73,11 @@ Promise.all([getUniqueTableNames, createStorageBucket]).then(function(success) {
         bigquery
             .query(options)
             .then((results) => {
-                const rows = results[0];
+                const rows = results[0].map(d => {
+                    return Object.assign({}, d, {
+                        AFFGEOID: '10'
+                    });
+                });
                 console.log(rows);
             })
             .catch((err) => {

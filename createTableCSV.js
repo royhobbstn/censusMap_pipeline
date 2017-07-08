@@ -2,10 +2,10 @@
 
 var fs = require("fs");
 
-const gcs = require('@google-cloud/storage')();
 const BigQuery = require('@google-cloud/bigquery');
 const Storage = require('@google-cloud/storage');
 const request = require('request');
+const gcs = Storage();
 
 var datatree;
 
@@ -32,7 +32,7 @@ const getUniqueTableNames = new Promise(function(resolve, reject) {
 
 // create storage bucket
 const createStorageBucket = new Promise(function(resolve, reject) {
-    gcs.createBucket('acs1115_tile_tables', function(err, gcs) {
+    gcs.createBucket('acs1115_tile_tables', function(err) {
         if (err) {
             // console.log(err);
         }
@@ -49,54 +49,32 @@ Promise.all([getUniqueTableNames, createStorageBucket]).then(function(success) {
         projectId: 'censusbigquery'
     });
 
-
     const unique_tables = success[0];
-    let write_stack = [];
 
     unique_tables.forEach(table => {
 
-        const pr = new Promise((resolve, reject) => {
-            const sqlQuery = `SELECT * from acs1115tables.e${table.toUpperCase()} WHERE SUMLEVEL='050' OR SUMLEVEL='040' OR SUMLEVEL='140' OR SUMLEVEL='150' OR SUMLEVEL='160';`;
-
-            console.log(sqlQuery);
-
-            // Query options list: https://cloud.google.com/bigquery/docs/reference/v2/jobs/query
-            const options = {
-                query: sqlQuery,
-                useLegacySql: false // Use standard SQL syntax for queries.
-            };
-
-            const storage = Storage({
-                projectId: 'censusbigquery'
-            });
-
-            let job;
-
-            bigquery
-                .query(options)
-                .export(storage.bucket('acs1115_tile_tables').file(table + '.csv'))
-                .then((results) => {
-                    job = results[0];
-                    console.log(`Job ${job.id} started.`);
-                    return job.promise();
-                })
-                .then((results) => {
-                    console.log(`Job ${job.id} completed.`);
-                })
-                .catch((err) => {
-                    console.error('ERROR:', err);
-                });
-
+        const storage = Storage({
+            projectId: 'censusbigquery'
         });
 
-        write_stack.push(pr);
+        let job;
 
+        bigquery
+            .dataset('acs1115tables')
+            .table('e' + table.toUpperCase())
+            .export(storage.bucket('acs1115_tile_tables').file('e' + table.toUpperCase() + '.csv'))
+            .then((results) => {
+                job = results[0];
+                console.log(`Job ${job.id} started.`);
+                return job.promise();
+            })
+            .then((results) => {
+                console.log(`Job ${job.id} completed.`);
+            })
+            .catch((err) => {
+                console.error('ERROR:', err);
+            });
 
-    });
-
-
-    Promise.all(write_stack).then((file_to_upload) => {
-        console.log('done!');
     });
 
 });

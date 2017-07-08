@@ -26,8 +26,6 @@
   "dependencies": {
     "@google-cloud/bigquery": "^0.9.6",
     "@google-cloud/storage": "^1.2.0",
-    "json2csv-stream": "^0.1.4",
-    "ldjson-stream": "^1.2.1",
     "request": "^2.81.0"
   }
 }

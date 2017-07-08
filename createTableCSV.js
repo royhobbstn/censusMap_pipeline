@@ -4,8 +4,8 @@ var fs = require("fs");
 
 const gcs = require('@google-cloud/storage')();
 const BigQuery = require('@google-cloud/bigquery');
+const Storage = require('@google-cloud/storage');
 const request = require('request');
-const json2csv = require('json2csv');
 
 var datatree;
 
@@ -66,26 +66,27 @@ Promise.all([getUniqueTableNames, createStorageBucket]).then(function(success) {
                 useLegacySql: false // Use standard SQL syntax for queries.
             };
 
-            // Runs the query
+            const storage = Storage({
+                projectId: 'censusbigquery'
+            });
+
+            let job;
+
             bigquery
                 .query(options)
+                .export(storage.bucket('acs1115_tile_tables').file(table + '.csv'))
                 .then((results) => {
-
-                    const csv = json2csv({
-                        data: results[0]
-                    });
-
-                    fs.writeFile('./output/' + table + '.csv', csv, function(err) {
-                        if (err) {
-                            console.log(err);
-                        }
-                        resolve('./output/' + table + '.csv');
-                    });
-
+                    job = results[0];
+                    console.log(`Job ${job.id} started.`);
+                    return job.promise();
+                })
+                .then((results) => {
+                    console.log(`Job ${job.id} completed.`);
                 })
                 .catch((err) => {
-                    console.log(err);
+                    console.error('ERROR:', err);
                 });
+
         });
 
         write_stack.push(pr);
@@ -95,20 +96,7 @@ Promise.all([getUniqueTableNames, createStorageBucket]).then(function(success) {
 
 
     Promise.all(write_stack).then((file_to_upload) => {
-        console.log(file_to_upload);
-
-        var bucket = gcs.bucket('acs1115_tile_tables');
-
-        file_to_upload.forEach(filename => {
-
-            // Upload a local file to a new file to be created in your bucket. 
-            bucket.upload(filename, function(err, file) {
-                if (!err) {
-                    console.log(filename + ' has been uploaded.');
-                }
-            });
-
-        });
+        console.log('done!');
     });
 
 });

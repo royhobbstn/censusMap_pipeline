@@ -47,9 +47,9 @@ declare -a arr=("01" "02" "04" "05" "06" "08" "09" "10" "11" "12" "13" "15" "16"
 for i in "${arr[@]}"
 do
 # gz_2010_54_140_00_500k.zip
-wget https://www2.census.gov/geo/tiger/GENZ2015/gz_2010_"$i"_150_00_500k.zip
-wget https://www2.census.gov/geo/tiger/GENZ2015/gz_2010_"$i"_160_00_500k.zip
-wget https://www2.census.gov/geo/tiger/GENZ2015/gz_2010_"$i"_140_00_500k.zip
+wget https://www2.census.gov/geo/tiger/GENZ2010/gz_2010_"$i"_150_00_500k.zip
+wget https://www2.census.gov/geo/tiger/GENZ2010/gz_2010_"$i"_160_00_500k.zip
+wget https://www2.census.gov/geo/tiger/GENZ2010/gz_2010_"$i"_140_00_500k.zip
 done
 
 # repeat for all geo files STATES

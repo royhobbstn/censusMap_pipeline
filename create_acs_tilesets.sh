@@ -16,14 +16,11 @@ brew install tippecanoe
 # download all CSV files from multi file bucket
 gsutil cp gs://acs1115_tile_tables/*.csv .
 gsutil cp gs://acs1115_tiles_staging/*.mbtiles .
-# wget https://storage.googleapis.com/acs1115_multisequence/eseq_001_002_003.csv
-# wget https://storage.googleapis.com/acs1115_tiles_staging/acs1115_state.mbtiles
 
 mkdir completed
 mkdir encoded
 mkdir outputmbtiles
 
-# TODO should be part of tileCSVmerge
 # for each CSV file
 # swap columns so geo key is first
 for file in *.csv
@@ -37,16 +34,10 @@ for file in ./encoded/*.csv
 do for tile in *.mbtiles
 do newfile=${file%????}
 echo "joining $newfile with $tile"
-tile-join -pk -f -o ./outputmbtiles/${newfile#??????????}_${tile%????????}.mbtiles -c $file $tile
+tile-join -pk -f -o ./outputmbtiles/${newfile#??????????}_${tile%????????}.mbtiles -c $file --exclude=FILEID --exclude=STUSAB --exclude=SUMLEVEL --exclude=COMPONENT --exclude=LOGRECNO --exclude=US --exclude=REGION --exclude=DIVISION --exclude=STATECE --exclude=STATE --exclude=COUNTY --exclude=COUSUB --exclude=PLACE --exclude=TRACT --exclude=BLKGRP --exclude=CONCIT --exclude=AIANHH --exclude=AIANHHFP --exclude=AIHHTLI --exclude=AITSCE --exclude=AITS --exclude=ANRC --exclude=CBSA --exclude=CSA --exclude=METDIV --exclude=MACC --exclude=MEMI --exclude=NECTA --exclude=CNECTA --exclude=NECTADIV --exclude=UA --exclude=BLANK1 --exclude=CDCURR --exclude=SLDU --exclude=SLDL --exclude=BLANK2 --exclude=BLANK3 --exclude=ZCTA5 --exclude=SUBMCD --exclude=SDELM --exclude=SDSEC --exclude=SDUNI --exclude=UR --exclude=PCI --exclude=BLANK4 --exclude=BLANK5 --exclude=PUMA5 --exclude=BLANK6 --exclude=KEY --exclude=BTTR --exclude=BTBG --exclude=BLANK7 $tile
 done;
 done;
 
-
-
-# for each mbtiles file 
-
-# end for each mbtiles
-# end for each csv 
 
 gsutil rm -r gs://acs1115_tiles
 gsutil mb gs://acs1115_tiles

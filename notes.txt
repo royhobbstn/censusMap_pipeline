@@ -1,1 +1,2 @@
-census blocks shapefiles - associative array
+
+better tiling of blocks - find best way to simplify

@@ -74,13 +74,13 @@ do mapshaper $file -o format=geojson; done;
 # end repeat for all shp files 
 
 # custom per each json file
-# alter geoid to match between data and geo file 0400000US31
-# sed -i -e 's/0500000US/05000US/g' gz_2010_us_050_00_500k.json
-# sed -i -e 's/0400000US/04000US/g' gz_2010_us_040_00_500k.json
-# sed -i -e 's/1500000US/15000US/g' gz_2010_us_bg_500k.json
-# sed -i -e 's/1600000US/16000US/g' gz_2010_us_place_500k.json
-# sed -i -e 's/1400000US/14000US/g' gz_2010_us_tract_500k.json
-# TODO blocks
+# alter geoid to match between data and geo file
+sed -i -e 's/0500000US//g' gz_2010_us_050_00_500k.json
+sed -i -e 's/0400000US//g' gz_2010_us_040_00_500k.json
+sed -i -e 's/1500000US//g' gz_2010_us_bg_500k.json
+sed -i -e 's/1600000US//g' gz_2010_us_place_500k.json
+sed -i -e 's/1400000US//g' gz_2010_us_tract_500k.json
+# not necessary to fix blocks
 
 
 # only retain geoid column
@@ -89,8 +89,7 @@ tippecanoe -f -o c2010_state.mbtiles -l state -z 10 -y GEO_ID -aL -D9 gz_2010_us
 tippecanoe -f -o c2010_bg.mbtiles -l bg -z 10 -y GEO_ID -aL -D9 gz_2010_us_bg_500k.json
 tippecanoe -f -o c2010_place.mbtiles -l place -z 10 -y GEO_ID -aL -D9 gz_2010_us_place_500k.json
 tippecanoe -f -o c2010_tract.mbtiles -l tract -z 10 -y GEO_ID -aL -D9 gz_2010_us_tract_500k.json
-tippecanoe -f -o c2010_block.mbtiles -l block -z 10 -pk -pf tl_2010_us_block.json
-# TODO blocks
+tippecanoe -f -o c2010_block.mbtiles -l block -z 10 -y GEO_ID -pk -pf tl_2010_us_block.json
 # end custom for each json file
 
 # try some of these:

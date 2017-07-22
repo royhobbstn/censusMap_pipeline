@@ -25,12 +25,12 @@ npm install -g mapshaper
 # cartographic shapefiles
 # https://www2.census.gov/geo/tiger/GENZ2010/
 
-# wget https://www2.census.gov/geo/tiger/GENZ2010/gz_2010_us_050_00_500k.zip
-# wget https://www2.census.gov/geo/tiger/GENZ2010/gz_2010_us_040_00_500k.zip
+wget https://www2.census.gov/geo/tiger/GENZ2010/gz_2010_us_050_00_500k.zip
+wget https://www2.census.gov/geo/tiger/GENZ2010/gz_2010_us_040_00_500k.zip
 
 # repeat for all geo files COUNTRY
-# for file in *.zip
-# do unzip $file; done;
+for file in *.zip
+do unzip $file; done;
 # end repeat for all geo files
 
 
@@ -49,9 +49,9 @@ declare -a arr=("08" "09")
 for i in "${arr[@]}"
 do
 # gz_2010_54_140_00_500k.zip
-# wget https://www2.census.gov/geo/tiger/GENZ2010/gz_2010_"$i"_150_00_500k.zip
-# wget https://www2.census.gov/geo/tiger/GENZ2010/gz_2010_"$i"_160_00_500k.zip
-# wget https://www2.census.gov/geo/tiger/GENZ2010/gz_2010_"$i"_140_00_500k.zip
+wget https://www2.census.gov/geo/tiger/GENZ2010/gz_2010_"$i"_150_00_500k.zip
+wget https://www2.census.gov/geo/tiger/GENZ2010/gz_2010_"$i"_160_00_500k.zip
+wget https://www2.census.gov/geo/tiger/GENZ2010/gz_2010_"$i"_140_00_500k.zip
 # tiger
 wget https://www2.census.gov/geo/tiger/TIGER2010/TABBLOCK/2010/tl_2010_"$i"_tabblock10.zip
 done
@@ -62,9 +62,9 @@ do unzip $file; done;
 # end repeat for all geo files
 
 # programmatically combine?  Separate routine?
-# mapshaper -i *_150_00_500k.shp combine-files -merge-layers -o ../gz_2010_us_bg_500k.shp
-# mapshaper -i *_160_00_500k.shp combine-files -merge-layers -o ../gz_2010_us_place_500k.shp
-# mapshaper -i *_140_00_500k.shp combine-files -merge-layers -o ../gz_2010_us_tract_500k.shp
+mapshaper -i *_150_00_500k.shp combine-files -merge-layers -o ../gz_2010_us_bg_500k.shp
+mapshaper -i *_160_00_500k.shp combine-files -merge-layers -o ../gz_2010_us_place_500k.shp
+mapshaper -i *_140_00_500k.shp combine-files -merge-layers -o ../gz_2010_us_tract_500k.shp
 mapshaper -i tl_2010_*.shp combine-files -merge-layers -o ../tl_2010_us_block.shp
 cd ..
 
@@ -84,12 +84,12 @@ do mapshaper $file -o format=geojson; done;
 
 
 # only retain geoid column
-# tippecanoe -f -o c2010_county.mbtiles -l county -z 10 -y GEO_ID -aL -D9 gz_2010_us_050_00_500k.json
-# tippecanoe -f -o c2010_state.mbtiles -l state -z 10 -y GEO_ID -aL -D9 gz_2010_us_040_00_500k.json
-# tippecanoe -f -o c2010_bg.mbtiles -l bg -z 10 -y GEO_ID -aL -D9 gz_2010_us_bg_500k.json
-# tippecanoe -f -o c2010_place.mbtiles -l place -z 10 -y GEO_ID -aL -D9 gz_2010_us_place_500k.json
-# tippecanoe -f -o c2010_tract.mbtiles -l tract -z 10 -y GEO_ID -aL -D9 gz_2010_us_tract_500k.json
-tippecanoe -f -o c2010_block.mbtiles -l block -z 10 tl_2010_us_block.json
+tippecanoe -f -o c2010_county.mbtiles -l county -z 10 -y GEO_ID -aL -D9 gz_2010_us_050_00_500k.json
+tippecanoe -f -o c2010_state.mbtiles -l state -z 10 -y GEO_ID -aL -D9 gz_2010_us_040_00_500k.json
+tippecanoe -f -o c2010_bg.mbtiles -l bg -z 10 -y GEO_ID -aL -D9 gz_2010_us_bg_500k.json
+tippecanoe -f -o c2010_place.mbtiles -l place -z 10 -y GEO_ID -aL -D9 gz_2010_us_place_500k.json
+tippecanoe -f -o c2010_tract.mbtiles -l tract -z 10 -y GEO_ID -aL -D9 gz_2010_us_tract_500k.json
+tippecanoe -f -o c2010_block.mbtiles -l block -z 10 -pk -pf tl_2010_us_block.json
 # TODO blocks
 # end custom for each json file
 

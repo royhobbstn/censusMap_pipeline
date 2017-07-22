@@ -80,7 +80,7 @@ sed -i -e 's/0400000US//g' gz_2010_us_040_00_500k.json
 sed -i -e 's/1500000US//g' gz_2010_us_bg_500k.json
 sed -i -e 's/1600000US//g' gz_2010_us_place_500k.json
 sed -i -e 's/1400000US//g' gz_2010_us_tract_500k.json
-sed -i -e 's/GEOID10/GEO_ID/g' gz_2010_us_tract_500k.json
+sed -i -e 's/GEOID10/GEO_ID/g' tl_2010_us_block.json
 
 
 # only retain geoid column

@@ -15,13 +15,13 @@ bash create_basic_tilesets.sh
 
 ```
 
-Install NodeJS (if not already installed).  Then:
+Install NodeJS (if not already installed).  Then, to create the data files needed specifically for the map, ready the map datatree file and extract all the relevant tables:
 
 ```
 node createTableCSV.js
 ```
 
-Then to create the final tilesets:
+Then, iterate over those datasets and join with the basic tilesets to create the final tilesets:
 ```
 bash create_acs_tilesets.sh
 ```

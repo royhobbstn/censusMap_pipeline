@@ -1,2 +1,12 @@
+BigQuery error in query operation: Error processing job 'censusbigquery:P18H_CELSsxwwWp0ArfDc': Exceeded rate
+limits: too many concurrent queries for this project. For more information, see
+https://cloud.google.com/bigquery/troubleshooting-errors
 
+run createTableCSV_c2010 (make sure it worked)
+
+then create new file create_c2000_tilesets_c2010.sh
+
+join tables to tiles
+
+-------
 better tiling of blocks - find best way to simplify

@@ -1,5 +1,5 @@
 # censusTileInsanity
-Use tippecanoe and tile-join to automate the creation of american community survey vector tilesets.
+Use tippecanoe and tile-join to automate the creation of american community survey  and decennial census vector tilesets.
 
 # Setup
 
@@ -11,17 +11,26 @@ sudo apt-get install git
 git clone https://github.com/royhobbstn/censusTileInsanity.git
 cd censusTileInsanity
 
-bash create_basic_tilesets.sh
-
+bash create_basic_tilesets_acs1115.sh
 ```
 
-Install NodeJS (if not already installed).  Then, to create the data files needed specifically for the map, ready the map datatree file and extract all the relevant tables:
+Install NodeJS (if not already installed).  Then, to create the data files needed specifically for the map, run:
 
 ```
-node createTableCSV.js
+node createTableCSV_acs1115.js
 ```
 
 Then, iterate over those datasets and join with the basic tilesets to create the final tilesets:
 ```
-bash create_acs_tilesets.sh
+bash create_acs_tilesets_acs1115.sh
 ```
+
+
+For the 2010 US Census, the process is similar, but the scripts would be:
+
+```
+bash create_basic_tilesets_c2010.sh
+node createTableCSV_c2010.js
+bash create_census_tilesets_c2010.sh
+```
+

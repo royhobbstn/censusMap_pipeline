@@ -26,7 +26,6 @@ mkdir outputmbtiles
 for file in *.csv
 do awk -F $',' ' { t = $1; $1 = $98; $98 = t; print; } ' OFS=$',' $file > ./completed/$file;
 iconv -f iso-8859-1 -t utf-8 ./completed/$file > ./encoded/$file
-sed -i '1s/^/AFF/' ./encoded/$file #TODO any Key naming Substitution?
 done;
 
 # nested loops to join every csv with every tileset

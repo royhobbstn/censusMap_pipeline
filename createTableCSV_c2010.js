@@ -62,7 +62,7 @@ Promise.all([getUniqueTableNames, createStorageBucket]).then(function(success) {
         bigquery
             .dataset('c2010tables')
             .table(table.toUpperCase())
-            .export(storage.bucket('c2010_tile_tables').file(table.toUpperCase() + '.csv'))
+            .export(storage.bucket('c2010_tile_tables').file(table.toUpperCase() + '_*.csv'))
             .then((results) => {
                 job = results[0];
                 console.log(`Job ${job.id} started.`);

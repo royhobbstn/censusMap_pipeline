@@ -5,6 +5,8 @@ mkdir advanced
 
 cd advanced
 
+mkdir splits
+
 sudo apt-get install -y ruby
 ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install)" < /dev/null
 PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
@@ -14,8 +16,18 @@ brew install tippecanoe
 
 
 # download all CSV files from multi file bucket
-gsutil cp gs://c2010_tile_tables/*.csv .
+gsutil cp gs://c2010_tile_tables/*.csv ./splits/
 gsutil cp gs://c2010_tiles_staging/*.mbtiles .
+
+cd splits
+
+# TODO recombine
+ls | awk -F '_' '!x[$1]++{print $1}' | while read -r line
+do
+    cat $line* > all_$line\.txt
+done
+
+exit 1;
 
 mkdir completed
 mkdir encoded

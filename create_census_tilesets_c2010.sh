@@ -29,6 +29,8 @@ done
 
 mv *.txt ./../
 
+cd ..
+
 mkdir completed
 mkdir encoded
 mkdir outputmbtiles

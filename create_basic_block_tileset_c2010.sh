@@ -50,13 +50,14 @@ do unzip $file; done;
 
 # repeat for all shp files
 for file in *.shp
-do ~/.nvm/versions/node/v8.2.1/bin/mapshaper $file -o format=geojson; done;
+do node --max_old_space_size=45056 ~/.nvm/versions/node/v8.2.1/bin/mapshaper $file -o format=geojson; done;
 # end repeat for all shp files 
 
 node --max_old_space_size=45056 ~/.nvm/versions/node/v8.2.1/bin/mapshaper -i tl_2010_*.json combine-files -merge-layers -o ../../tl_2010_us_block.json
 
 cd ..
 
+cd ..
 
 # custom per each json file
 # alter geoid to match between data and geo file

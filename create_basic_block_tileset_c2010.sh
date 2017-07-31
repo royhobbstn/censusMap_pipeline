@@ -18,7 +18,7 @@ wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-nvm install node
+nvm install node 8.2.1
 
 npm install -g mapshaper
 
@@ -50,10 +50,10 @@ do unzip $file; done;
 
 # repeat for all shp files
 for file in *.shp
-do mapshaper $file -o format=geojson; done;
+do ~/.nvm/versions/node/v8.2.1/bin/mapshaper $file -o format=geojson; done;
 # end repeat for all shp files 
 
-node --max_old_space_size=45056 ~/node_modules/.bin/mapshaper -i tl_2010_*.json combine-files -merge-layers -o ../../tl_2010_us_block.json
+node --max_old_space_size=45056 ~/.nvm/versions/node/v8.2.1/bin/mapshaper -i tl_2010_*.json combine-files -merge-layers -o ../../tl_2010_us_block.json
 
 cd ..
 

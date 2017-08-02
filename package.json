@@ -26,6 +26,11 @@
   "dependencies": {
     "@google-cloud/bigquery": "^0.9.6",
     "@google-cloud/storage": "^1.2.0",
-    "request": "^2.81.0"
+    "request": "^2.81.0",
+    "geojson-stream": "0.0.1",
+    "glob": "^7.1.2",
+    "single-line-log": "^1.1.2",
+    "stream-concat": "^0.1.0",
+    "through2": "^2.0.3"
   }
 }

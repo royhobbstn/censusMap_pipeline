@@ -57,6 +57,10 @@ for file in *.json
 do echo "update key $file"; sed -i -e 's/GEOID10/GEO_ID/g' $file;
 done;
 
+mv *.json ./../../../
+
+cd ../../../
+
 npm install
 node merge_geojson_stream.js
 

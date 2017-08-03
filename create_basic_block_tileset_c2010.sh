@@ -76,20 +76,21 @@ gsutil cp gs://c2010_tile_tables/*.csv ./splits/
 cd splits
 
 # TODO recombine
+echo "recombining table files"
 ls | awk -F '_' '!x[$1]++{print $1}' | while read -r line
 do
-    cat $line* > all_$line\.txt
+    cat $line* > $line\.txt
 done
 
-mv *.txt ./../
+mkdir divide
 
-cd ..
+mv *.txt ./divide
+
+cd divide
 
 # divide by state
-for file in *.txt
-do echo "dividing $file by state";
-awk -F ',' '{print > "$file"$6".csv"}' $file;
-done;
+for file in *.txt; do echo "splitting $file into states
+"; awk -F ',' -v fn=`basename ${file%????}` '{print > fn$6".csv"}' $file; done;
 
 exit 1;
 

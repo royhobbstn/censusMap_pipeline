@@ -57,11 +57,45 @@ for file in *.json
 do echo "update key $file"; sed -i -e 's/GEOID10/GEO_ID/g' $file;
 done;
 
+# TODO - bucketize individual state geojson
+
+# TODO - do attribute join here
+
 mv *.json ./../../../
 
 cd ../../../
 
 npm install
+# node createTableCSV_c2010.js
+
+mkdir splits
+
+# download all files from bucket
+gsutil cp gs://c2010_tile_tables/*.csv ./splits/
+
+cd splits
+
+# TODO recombine
+ls | awk -F '_' '!x[$1]++{print $1}' | while read -r line
+do
+    cat $line* > all_$line\.txt
+done
+
+mv *.txt ./../
+
+cd ..
+
+# divide by state
+for file in *.txt
+do echo "dividing $file by state";
+awk -F ',' '{print > "$file"$6".csv"}' $file;
+done;
+
+exit 1;
+
+
+# join 
+
 node merge_geojson_stream.js
 
 
@@ -74,9 +108,11 @@ tippecanoe -f -o c2010_block.mbtiles -l block -z 10 -y GEO_ID -pk -pf output.geo
 # --drop-densest-as-needed
 # --no-tile-size-limit
 
-gsutil rm gs://c2010_tiles_staging/c2010_block.mbtiles
+gsutil mb gs://c2010_block_tiles_staging
+
+gsutil rm gs://c2010_block_tiles_staging/c2010_block.mbtiles
 
 # copy all mbtiles files at once
-gsutil cp *.mbtiles gs://c2010_tiles_staging
+gsutil cp *.mbtiles gs://c2010_block_tiles_staging
 # gsutil cp *.json gs://c2010_tiles_staging
 

@@ -48,17 +48,44 @@ cd divide
 for file in *.txt; do echo "splitting $file into states
 "; awk -F ',' -v fn=`basename ${file%????}` '{print > fn"_"$6".csv"}' $file; done;
 
+# extract head -1 to new file
+for file in *STATE.csv; do head -1 $file > "header_"$file; done;
+
+mkdir header
+
 exit 1;
 
+# apply header to every applicable CSV
+# for every state 2 number code, loop through and add applicable header
+# you can use all *.txt files to give you an inventory of table prefixes
+
+for i in *.txt; do echo ${i%%.*}; 
+cat header_${i%%.*}_STATE.csv P1_01.csv > header/P1_01.csv; done;
+# this is where you left off.  loop through all states available (probably hard code)
+# and add header to each of them
+
+
+
 # download geojson
+gsutil cp gs://c2010_block_tiles_staging/*.geojson .
 
 # join with geojson
-
 # use https://github.com/node-geojson/geojson-join
+npm install -g geojson-join
+
+
+# loop through geojson
+# join 
+
+geojson-join --format=csv test/against.dbf \
+    --againstField=id \
+    --geojsonField=GEO_ID < test/random.geojson
+
 
 # merge all joined files together again
 
 # loop through
+# merge geojson should be configured to take an argument of the table name to be merged
 node merge_geojson_stream.js
 
 # loop through

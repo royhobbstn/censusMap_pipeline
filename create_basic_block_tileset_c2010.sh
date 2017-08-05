@@ -68,8 +68,9 @@ cat header_${i%%.*}_STATE.csv ${i%%.*}_$j.csv > header/${i%%.*}_$j.csv;
 done;
 done;
 
+mv *.txt header
 
-exit 1;
+cd header
 
 # download geojson
 gsutil cp gs://c2010_block_tiles_staging/*.geojson .
@@ -78,16 +79,22 @@ gsutil cp gs://c2010_block_tiles_staging/*.geojson .
 # use https://github.com/node-geojson/geojson-join
 npm install -g geojson-join
 
+mkdir geojson
 
 # loop through geojson
 # join 
+for j in "${arr[@]}"; do
+echo "joining csv to state geojson: $j"
+for i in *.txt; do echo ${i%%.*}; 
+geojson-join --format=csv "${i%%.*}"_"$j".csv --againstField=GEO_ID --geojsonField=GEO_ID < tl_2010_"$j"_tabblock10.geojson > geojson/"${i%%.*}"_"$j".geojson
+done;
+done;
 
-geojson-join --format=csv test/against.dbf \
-    --againstField=id \
-    --geojsonField=GEO_ID < test/random.geojson
 
-
+exit 1;
 # merge all joined files together again
+
+# TODO left off here
 
 # loop through
 # merge geojson should be configured to take an argument of the table name to be merged

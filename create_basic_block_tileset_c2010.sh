@@ -53,18 +53,23 @@ for file in *STATE.csv; do head -1 $file > "header_"$file; done;
 
 mkdir header
 
-exit 1;
-
 # apply header to every applicable CSV
 # for every state 2 number code, loop through and add applicable header
 # you can use all *.txt files to give you an inventory of table prefixes
 
+
+# declare an array variable
+declare -a arr=("01" "02" "04" "05" "06" "08" "09" "10" "11" "12" "13" "15" "16" "17" "18" "19" "20" "21" "22" "23" "24" "25" "26" "27" "28" "29" "30" "31" "32" "33" "34" "35" "36" "37" "38" "39" "40" "41" "42" "44" "45" "46" "47" "48" "49" "50" "51" "53" "54" "55" "56" "60" "66" "69" "72" "78")
+
+for j in "${arr[@]}"; do
+echo "adding header to state: $j"
 for i in *.txt; do echo ${i%%.*}; 
-cat header_${i%%.*}_STATE.csv P1_01.csv > header/P1_01.csv; done;
-# this is where you left off.  loop through all states available (probably hard code)
-# and add header to each of them
+cat header_${i%%.*}_STATE.csv ${i%%.*}_$j.csv > header/${i%%.*}_$j.csv;
+done;
+done;
 
 
+exit 1;
 
 # download geojson
 gsutil cp gs://c2010_block_tiles_staging/*.geojson .

@@ -90,14 +90,11 @@ geojson-join --format=csv "${i%%.*}"_"$j".csv --againstField=GEO_ID --geojsonFie
 done;
 done;
 
+cd ../../../../
 
-exit 1;
+mkdir tiles
+
 # merge all joined files together again
-
-# TODO left off here
-
-# loop through
-# merge geojson should be configured to take an argument of the table name to be merged
 node merge_geojson_stream.js
 
 # loop through

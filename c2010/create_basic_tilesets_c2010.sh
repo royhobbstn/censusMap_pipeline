@@ -54,25 +54,8 @@ do
 wget https://www2.census.gov/geo/tiger/GENZ2010/gz_2010_"$i"_150_00_500k.zip
 wget https://www2.census.gov/geo/tiger/GENZ2010/gz_2010_"$i"_160_00_500k.zip
 wget https://www2.census.gov/geo/tiger/GENZ2010/gz_2010_"$i"_140_00_500k.zip
-# tiger
-wget https://www2.census.gov/geo/tiger/TIGER2010/TABBLOCK/2010/tl_2010_"$i"_tabblock10.zip -P block/
 done
 
-cd block
-
-# repeat for all geo files STATES
-for file in *.zip
-do unzip $file; done;
-# end repeat for all geo files
-
-# repeat for all shp files
-for file in *.shp
-do mapshaper $file -o format=geojson; done;
-# end repeat for all shp files 
-
-mapshaper -i tl_2010_*.json combine-files -merge-layers -o ../../tl_2010_us_block.json
-
-cd ..
 
 # repeat for all geo files STATES
 for file in *.zip
@@ -97,7 +80,6 @@ sed -i -e 's/0400000US//g' gz_2010_us_040_00_500k.json
 sed -i -e 's/1500000US//g' gz_2010_us_bg_500k.json
 sed -i -e 's/1600000US//g' gz_2010_us_place_500k.json
 sed -i -e 's/1400000US//g' gz_2010_us_tract_500k.json
-sed -i -e 's/GEOID10/GEO_ID/g' tl_2010_us_block.json
 
 
 # only retain geoid column
@@ -106,7 +88,6 @@ tippecanoe -f -o c2010_state.mbtiles -l state -z 10 -y GEO_ID -aL -D9 gz_2010_us
 tippecanoe -f -o c2010_bg.mbtiles -l bg -z 10 -y GEO_ID -aL -D9 gz_2010_us_bg_500k.json
 tippecanoe -f -o c2010_place.mbtiles -l place -z 10 -y GEO_ID -aL -D9 gz_2010_us_place_500k.json
 tippecanoe -f -o c2010_tract.mbtiles -l tract -z 10 -y GEO_ID -aL -D9 gz_2010_us_tract_500k.json
-tippecanoe -f -o c2010_block.mbtiles -l block -z 10 -y GEO_ID -pk -pf tl_2010_us_block.json
 # end custom for each json file
 
 # try some of these:

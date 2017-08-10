@@ -44,14 +44,8 @@ mv *.txt ./divide
 
 cd divide
 
-# divide by sumlev
-for file in *.txt; do echo "splitting $file into sumlev
-"; awk -F ',' -v fn=`basename ${file%????}` '{print > fn"_"$2".fsv"}' $file; done;
-
-exit 1;
-
 # divide by state
-for file in *.fsv; do echo "splitting $file into states
+for file in *.txt; do echo "splitting $file into states
 "; awk -F ',' -v fn=`basename ${file%????}` '{print > fn"_"$6".csv"}' $file; done;
 
 # extract head -1 to new file
@@ -92,7 +86,7 @@ mkdir geojson
 for j in "${arr[@]}"; do
 echo "joining csv to state geojson: $j"
 for i in *.txt; do echo ${i%%.*}; 
-node --max-old-space-size=45768 `which geojson-join` --format=csv "${i%%.*}"_"$j".csv --againstField=GEO_ID --geojsonField=GEO_ID < tl_2010_"$j"_tabblock10.geojson > geojson/"${i%%.*}"_"$j".geojson
+node --max-old-space-size=8192 `which geojson-join` --format=csv "${i%%.*}"_"$j".csv --againstField=GEO_ID --geojsonField=GEO_ID < tl_2010_"$j"_tabblock10.geojson > geojson/"${i%%.*}"_"$j".geojson
 done;
 done;
 
@@ -101,7 +95,7 @@ cd ../../../../
 mkdir tiles
 
 # merge all joined files together again
-node --max-old-space-size=16384 merge_geojson_stream.js
+node --max-old-space-size=8192 merge_geojson_stream.js
 
 cd tiles
 

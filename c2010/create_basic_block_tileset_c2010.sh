@@ -86,7 +86,7 @@ mkdir geojson
 for j in "${arr[@]}"; do
 echo "joining csv to state geojson: $j"
 for i in *.txt; do echo ${i%%.*}; 
-node --max-old-space-size=16384 `which geojson-join` --format=csv "${i%%.*}"_"$j".csv --againstField=GEO_ID --geojsonField=GEO_ID < tl_2010_"$j"_tabblock10.geojson > geojson/"${i%%.*}"_"$j".geojson
+node --max-old-space-size=45768 `which geojson-join` --format=csv "${i%%.*}"_"$j".csv --againstField=GEO_ID --geojsonField=GEO_ID < tl_2010_"$j"_tabblock10.geojson > geojson/"${i%%.*}"_"$j".geojson
 done;
 done;
 

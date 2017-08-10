@@ -44,8 +44,14 @@ mv *.txt ./divide
 
 cd divide
 
+# divide by sumlev
+for file in *.txt; do echo "splitting $file into sumlev
+"; awk -F ',' -v fn=`basename ${file%????}` '{print > fn"_"$2".fsv"}' $file; done;
+
+exit 1;
+
 # divide by state
-for file in *.txt; do echo "splitting $file into states
+for file in *.fsv; do echo "splitting $file into states
 "; awk -F ',' -v fn=`basename ${file%????}` '{print > fn"_"$6".csv"}' $file; done;
 
 # extract head -1 to new file

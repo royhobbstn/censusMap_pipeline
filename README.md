@@ -66,18 +66,6 @@ Create the data files needed specifically for the map (determined from the map's
 node createTableCSV_c2010.js
 ```
 
-Download all block shapefiles.  Convert them to GeoJSON.  Copy them to bucket: ```gs://c2010_block_tiles_staging```
-
-```
-bash c2010_convert_shp_geojson.sh
-```
-
-Download all pre-created map CSV files from ```gs://c2010_tile_tables```.  Split them into state-level CSV files.  Download all state-level block geojson files from ```gs://c2010_block_tiles_staging```.  Join them with the CSV data.  Merge all the states into one big geojson.  Create one big .mbtiles block dataset per each data table.  Upload to ```gs://c2010_block_tiles```.
-
-```
-bash create_basic_block_tileset_c2010.sh
-```
-
 Download state, county, place, tract, and block group files from the US Census.  (place, tract and block group will need to be combined from state-level files.)  Convert them all to GeoJSON files, and then convert them all to .mbtiles datasets, keeping only the GEO\_ID attribute.  Upload to ```gs://c2010_tiles_staging```.
 
 ```
@@ -90,8 +78,18 @@ Download all CSV tables (```gs://c2010_tile_tables```) and all (non-block) tile 
 bash create_census_tilesets_c2010.sh
 ```
 
+## Additionally for Census Blocks
 
+Download all block shapefiles.  Convert them to GeoJSON.  Copy them to bucket: ```gs://c2010_block_tiles_staging```
 
+```
+bash c2010_convert_shp_geojson.sh
+```
 
+Download all pre-created map CSV files from ```gs://c2010_tile_tables```.  Split them into state-level CSV files.  Download all state-level block geojson files from ```gs://c2010_block_tiles_staging```.  Join them with the CSV data.  Merge all the states into one big geojson.  Create one big .mbtiles block dataset per each data table.  Upload to ```gs://c2010_block_tiles```.
+
+```
+bash create_basic_block_tileset_c2010.sh
+```
 
 

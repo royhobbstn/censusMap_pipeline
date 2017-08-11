@@ -27,7 +27,12 @@ do
     cat $line* > all_$line\.txt
 done
 
-mv *.txt ./../
+# TODO left off here
+for file in all_*
+do awk -F , ' (NR==1) || ( (($2 == "040") || ($2 == "050") || ($2 == "140") || ($2 == "150") || ($2 == "160") ) && ( $3 == "00" ))  ' $file > $file"2";
+done;
+
+mv *.txt2 ./../
 
 cd ..
 
@@ -37,13 +42,13 @@ mkdir outputmbtiles
 
 # for each CSV file
 # swap columns so geo key is first
-for file in *.txt
+for file in *.txt2
 do awk -F $',' ' { t = $1; $1 = $98; $98 = t; print; } ' OFS=$',' $file > ./completed/$file;
 iconv -f iso-8859-1 -t utf-8 ./completed/$file > ./encoded/$file
 done;
 
 # nested loops to join every csv with every tileset
-for file in ./encoded/*.txt
+for file in ./encoded/*.txt2
 do for tile in *.mbtiles
 do newfile=${file%????}
 echo "joining $newfile with $tile"
